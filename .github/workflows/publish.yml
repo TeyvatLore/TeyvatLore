@@ -9,6 +9,7 @@ jobs:
   deploy:
     env:
       PRODUCTION: true
+      NUXT_ROUTER_BASE: /TeyvatLore/
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -40,7 +41,6 @@ jobs:
           key: ${{ runner.os }}-dep-${{ steps.node-version.outputs.ver }}-${{ hashFiles('**/yarn.lock') }}
 
       - run: yarn install
-
       - run: yarn generate
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3.8.0
@@ -50,4 +50,3 @@ jobs:
           force_orphan: true
           user_name: "github-actions[bot]"
           user_email: "github-actions[bot]@users.noreply.github.com"
-          cname: dev.teyvatlore.com
