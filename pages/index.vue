@@ -13,7 +13,14 @@
         :max-bounds="maxBounds"
         :crs="mapCRS"
       >
-        <l-marker :lat-lng="[2576, 1742]" />
+        <l-control>
+          <div>
+            <p>
+              <b>Pos:</b>
+              {{ posX }} {{ posY }}
+            </p>
+          </div>
+        </l-control>
       </l-map>
     </client-only>
   </div>
@@ -28,12 +35,20 @@ const mapSize = [12288, 15360]
 
 export default Vue.extend({
   name: 'IndexPage',
+  async asyncData ({ $content }) {
+    const markers = await $content('markers').fetch()
+    return {
+      markers: (markers as any).markers
+    }
+  },
   data () {
     return {
       maxBounds: null as unknown as L.LatLngBounds,
       mapCRS: null as unknown as L.CRS,
       tileLayer: null as unknown as L.TileLayer,
-      mapReady: false
+      mapReady: false,
+      posX: 0,
+      posY: 0
     }
   },
   mounted () {
@@ -76,18 +91,16 @@ export default Vue.extend({
 
     this.mapReady = true
     this.$nextTick(function () {
-      (this.$refs.mapi as any).mapObject.addLayer(this.tileLayer)
+      const mapObject = (this.$refs.mapi as any).mapObject
+      mapObject.addLayer(this.tileLayer)
+      for (const m of (this as any).markers) {
+        this.$L.marker((m as any).pos, { title: (m as any).name }).addTo(mapObject)
+      }
+      mapObject.on('mousemove', (e : L.LeafletMouseEvent) => {
+        this.posX = e.latlng.lat
+        this.posY = e.latlng.lng
+      })
     })
-    // const mapObject = new TileLayerClass('', {
-    //   maxZoom: 10,
-    //   minZoom: -6,
-    //   maxNativeZoom: 0,
-    //   minNativeZoom: -3,
-    //   bounds: latLngBounds(
-    //     latLng(-mapCenter[0], -mapCenter[1]),
-    //     latLng(mapSize[0] - mapCenter[0], mapSize[1] - mapCenter[1])
-    //   )
-    // })
   }
 })
 </script>
