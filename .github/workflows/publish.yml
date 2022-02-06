@@ -50,3 +50,11 @@ jobs:
           force_orphan: true
           user_name: "github-actions[bot]"
           user_email: "github-actions[bot]@users.noreply.github.com"
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: benc-uk/workflow-dispatch@v1
+        with:
+          repo: TeyvatLore/TeyvatLore-Data
+          workflow: Publish Combined
+          token: ${{ secrets.PAT }}
