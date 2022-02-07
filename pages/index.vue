@@ -23,16 +23,18 @@
           </div>
         </l-control>
         <l-control class="nav-wrapper" position="topleft">
-          <div id="top-nav">
-            <h1>图研所</h1>
-            <div id="top-nav-location">
+          <div class="flex text-white">
+            <h1 class="text-xl">
+              图研所
+            </h1>
+            <div class="flex flex-col justify-end ml-8">
               {{ currentRegion }}
             </div>
           </div>
         </l-control>
         <l-control class="nav-wrapper" position="topleft">
-          <div id="side-nav">
-            <div id="location-btn">
+          <div class="flex flex-col justify-between">
+            <div class="flex flex-col location-btn">
               <button @click="selectRegion">
                 <img
                   name="0"
@@ -79,7 +81,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import '@/assets/styles/global.css'
 
 const mapCenter = [3568, 6286]
 const mapSize = [12288, 15360]
@@ -103,7 +104,7 @@ export default Vue.extend({
       currentRegion: '蒙德',
       regions: ['蒙德', '璃月', '稻妻', '龙脊雪山', '渊下宫'],
       regionImgPostfix: ['1', '', '', '', ''],
-      imgFolder: './images/'
+      imgFolder: '~assets/images/'
     }
   },
   mounted () {
@@ -189,39 +190,23 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
 #map-wrap {
   height: 91vh;
 }
+
 .nav-wrapper {
   margin-left: 0;
 }
-#top-nav {
-  display: flex;
-  color: #fff;
-}
-#top-nav > h1 {
-  font-size: 30px;
-}
-#top-nav-location {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  margin-left: 2em;
-}
-#side-nav {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-#location-btn,
-#other-btn {
-  display: flex;
-  flex-direction: column;
-}
 
-#location-btn img {
+.location-btn img {
   width: 60px;
   height: 60px;
+}
+
+.sideNav {
+  @apply flex flex-col;
+  /* avoid use inline color, use color palette */
+  background-color: rgba(66, 101, 136, 0.5);
 }
 </style>
