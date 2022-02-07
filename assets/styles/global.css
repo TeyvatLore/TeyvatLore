@@ -1,0 +1,5 @@
+.sideNav{
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(66, 101, 136, 0.5);
+}
