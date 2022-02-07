@@ -28,41 +28,17 @@
               图研所
             </h1>
             <div class="flex flex-col justify-end ml-8">
-              {{ currentRegion }}
+              {{ currentRegionName }}
             </div>
           </div>
         </l-control>
         <l-control class="nav-wrapper" position="topleft">
           <div class="flex flex-col justify-between">
             <div class="flex flex-col location-btn">
-              <button @click="selectRegion">
+              <button v-for="r in regions" :key="r.id" @click="selectRegion(r)">
                 <img
-                  name="0"
-                  :src="imgFolder + regions[0] + regionImgPostfix[0] + '.png'"
-                >
-              </button>
-              <button @click="selectRegion">
-                <img
-                  name="1"
-                  :src="imgFolder + regions[1] + regionImgPostfix[1] + '.png'"
-                >
-              </button>
-              <button @click="selectRegion">
-                <img
-                  name="2"
-                  :src="imgFolder + regions[2] + regionImgPostfix[2] + '.png'"
-                >
-              </button>
-              <button @click="selectRegion">
-                <img
-                  name="3"
-                  :src="imgFolder + regions[3] + regionImgPostfix[3] + '.png'"
-                >
-              </button>
-              <button @click="selectRegion">
-                <img
-                  name="4"
-                  :src="imgFolder + regions[4] + regionImgPostfix[4] + '.png'"
+                  name="r.name"
+                  :src="getRegionButtonImage(r.id)"
                 >
               </button>
             </div>
@@ -101,10 +77,15 @@ export default Vue.extend({
       mapReady: false,
       posX: 0,
       posY: 0,
-      currentRegion: '蒙德',
-      regions: ['蒙德', '璃月', '稻妻', '龙脊雪山', '渊下宫'],
-      regionImgPostfix: ['1', '', '', '', ''],
-      imgFolder: '~assets/images/'
+      regions: [
+        { id: 'mondstadt', name: '蒙德' },
+        { id: 'liyue', name: '璃月' },
+        { id: 'inazuma', name: '稻妻' },
+        { id: 'dragonspine', name: '龙脊雪山' },
+        { id: 'enkanomiya', name: '渊下宫' }
+      ],
+      currentRegion: 'mondstadt',
+      currentRegionName: '蒙德'
     }
   },
   mounted () {
@@ -174,17 +155,14 @@ export default Vue.extend({
     })
   },
   methods: {
+    getRegionButtonImage (id : string) {
+      const active = id === this.currentRegion ? '_active' : ''
+      return require(`~/assets/images/btn_switch_${id}${active}.png`)
+    },
     // switch region on map
-    selectRegion (event: any) {
-      const index = Number(event.target.name)
-      this.currentRegion = this.regions[index]
-      for (let i = 0; i < this.regionImgPostfix.length; i++) {
-        if (index === i) {
-          this.regionImgPostfix[i] = '1'
-        } else {
-          this.regionImgPostfix[i] = ''
-        }
-      }
+    selectRegion ({ id, name } : { id: string, name: string}) {
+      this.currentRegion = id
+      this.currentRegionName = name
     }
   }
 })
