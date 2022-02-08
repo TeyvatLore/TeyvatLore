@@ -42,11 +42,9 @@
             </svg>
           </button>
         </div>
+        <img class="w-28 mx-2" name="title" src="~/assets/images/teyvatlore_white.png">
         <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
-          <div class="flex-shrink-0 flex items-center">
-            <span class="text-white">Teyvat Lore</span>
-          </div>
-          <div class="hidden sm:block sm:ml-6">
+          <div class="hidden sm:block sm:ml-6 items-center">
             <div class="flex space-x-4">
               <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
               <a href="#" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">World Map</a>
