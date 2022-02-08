@@ -74,7 +74,7 @@ export default Vue.extend({
       mapCRS: null as unknown as L.CRS,
       tileLayer: null as unknown as L.TileLayer,
       mapReady: false,
-      mapObject: null as unknown,
+      mapObject: null as unknown as L.Map,
       posX: 0,
       posY: 0,
       regions: [
@@ -171,11 +171,11 @@ export default Vue.extend({
       return require(`~/assets/images/btn_switch_${id}${active}.png`)
     },
     // switch region on map
-    selectRegion ({ id, name, latlng } : { id: string, name: string, latlng: Array<Number>}) {
+    selectRegion ({ id, name, latlng } : { id: string, name: string, latlng: number[]}) {
       this.currentRegion = id
       this.currentRegionName = name
 
-      this.mapObject.setView(latlng, -1)
+      this.mapObject.setView(latlng as [number, number], -1)
 
       // temp zoom level to show enkanomiya
       if (id === 'enkanomiya') {
