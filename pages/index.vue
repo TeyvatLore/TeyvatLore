@@ -51,6 +51,7 @@
         </l-control>
       </l-map>
     </client-only>
+    <img src="~/assets/images/CT_sun_flame_gate.png" style="display: none">
   </div>
 </template>
 
@@ -148,6 +149,9 @@ export default Vue.extend({
       )
     })
 
+    const popup = this.$L.popup()
+      .setContent('<div style="width: 300px">www</div>')
+
     this.mapReady = true
     this.$nextTick(function () {
       const mapObject = (this.$refs.mapi as any).mapObject
@@ -155,6 +159,7 @@ export default Vue.extend({
       for (const m of (this as any).markers) {
         this.$L
           .marker((m as any).pos, { title: (m as any).name })
+          .bindPopup(popup)
           .addTo(mapObject)
       }
       mapObject.on('mousemove', (e: L.LeafletMouseEvent) => {
