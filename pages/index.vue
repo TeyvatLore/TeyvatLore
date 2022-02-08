@@ -198,6 +198,11 @@ export default Vue.extend({
 </script>
 
 <style lang="postcss" scoped>
+/*overload the default font family inside of leaflet*/
+.leaflet-container{
+  font-family: "汉仪文黑";
+}
+
 #map-wrap {
   height: 91vh;
 }
