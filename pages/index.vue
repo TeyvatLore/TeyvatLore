@@ -22,6 +22,11 @@
             </p>
           </div>
         </l-control>
+        <l-control id="location-detail-card-wrapper" position="topright">
+          <div id="location-detail-card">
+            <p>owo</p>
+          </div>
+        </l-control>
         <l-control class="nav-wrapper shadow-md" style="margin-top: 0" position="topleft">
           <div class="flex text-white">
             <div class="flex bg-gradient-to-r from-gray-700 w-screen h-12 items-center ">
