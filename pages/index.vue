@@ -14,20 +14,22 @@
         :crs="mapCRS"
         :options="{ zoomControl: false }"
       >
-        <l-control>
+        <l-control position="bottomright">
           <div>
-            <p>
+            <p class="text-white">
               <b>Pos:</b>
               {{ posX }} {{ posY }}
             </p>
           </div>
         </l-control>
-        <l-control class="nav-wrapper" position="topleft">
-          <div class="flex text-white">
-            <h1 class="text-xl">
-              图研所
-            </h1>
-            <div class="flex flex-col justify-end ml-8">
+        <l-control id="location-detail-card-wrapper" position="topright">
+          <div id="location-detail-card">
+            <p>owo</p>
+          </div>
+        </l-control>
+        <l-control id="nav-wrapper" position="topleft">
+          <div id="nav">
+            <div class="flex flex-col ml-52 mt-10 w-full text-white">
               {{ currentRegionName }}
             </div>
           </div>
@@ -36,16 +38,13 @@
           <div class="flex flex-col justify-between">
             <div class="flex flex-col location-btn">
               <button v-for="r in regions" :key="r.id" @click="selectRegion(r)">
-                <img
-                  name="r.name"
-                  :src="getRegionButtonImage(r.id)"
-                >
+                <img name="r.name" :src="getRegionButtonImage(r.id)">
               </button>
             </div>
           </div>
         </l-control>
         <l-control class="nav-wrapper" position="bottomleft">
-          <div id="other-btn">
+          <div class="flex flex-col">
             <button>二维码</button>
             <button>分享</button>
           </div>
@@ -155,12 +154,12 @@ export default Vue.extend({
     })
   },
   methods: {
-    getRegionButtonImage (id : string) {
+    getRegionButtonImage (id: string) {
       const active = id === this.currentRegion ? '_active' : ''
       return require(`~/assets/images/btn_switch_${id}${active}.png`)
     },
     // switch region on map
-    selectRegion ({ id, name } : { id: string, name: string}) {
+    selectRegion ({ id, name }: { id: string; name: string }) {
       this.currentRegion = id
       this.currentRegionName = name
     }
@@ -173,8 +172,22 @@ export default Vue.extend({
   height: 91vh;
 }
 
-.nav-wrapper {
-  margin-left: 0;
+#location-detail-card-wrapper {
+    margin-right: 0;
+}
+
+#location-detail-card {
+  @apply flex flex-col z-10;
+}
+
+#nav-wrapper {
+  margin: 0;
+}
+
+#nav{
+  @apply flex flex-col w-screen;
+  height: 147px;
+  background: url('~@/assets/images/nav_logo_bg.png') no-repeat;
 }
 
 .location-btn img {
