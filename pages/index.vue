@@ -82,7 +82,7 @@ export default Vue.extend({
         { id: 'liyue', name: '璃月', latlng: [0, 0] },
         { id: 'inazuma', name: '稻妻', latlng: [6500, 3600] },
         { id: 'dragonspine', name: '龙脊雪山', latlng: [1600, -2200] },
-        { id: 'enkanomiya', name: '渊下宫', latlng: [0, 0] }
+        { id: 'enkanomiya', name: '渊下宫', latlng: [-1000, -4700] }
       ],
       currentRegion: 'mondstadt',
       currentRegionName: '蒙德',
@@ -121,9 +121,17 @@ export default Vue.extend({
     })
 
     const TileLayerClass = this.$L.TileLayer.extend({
-      getTileUrl (coords: L.Coords) {
+      getTileUrl: (coords: L.Coords) => {
         const [x, y, z] = [coords.x, coords.y, coords.z + 13]
-        return `https://assets.yuanshen.site/tiles_twt/${z}/${x}_${y}.png`
+        if (this.currentRegion === 'enkanomiya') {
+          if (x >= 0 && x <= 3 && y >= 0 && y <= 3) {
+            return `enkanomiya/${x}_${y}.png`
+          } else {
+            return 'enkanomiya/3_3.png'
+          }
+        } else {
+          return `https://assets.yuanshen.site/tiles_twt/${z}/${x}_${y}.png`
+        }
       },
       reuseTiles: true
     })
@@ -166,7 +174,13 @@ export default Vue.extend({
     selectRegion ({ id, name, latlng } : { id: string, name: string, latlng: Array<Number>}) {
       this.currentRegion = id
       this.currentRegionName = name
+
       this.mapObject.setView(latlng, -1)
+
+      // temp zoom level to show enkanomiya
+      if (id === 'enkanomiya') {
+        this.mapObject.setZoom(-2)
+      }
     }
   }
 })
