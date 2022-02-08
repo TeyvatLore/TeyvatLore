@@ -75,14 +75,15 @@ export default Vue.extend({
       mapCRS: null as unknown as L.CRS,
       tileLayer: null as unknown as L.TileLayer,
       mapReady: false,
+      mapObject: null as unknown,
       posX: 0,
       posY: 0,
       regions: [
-        { id: 'mondstadt', name: '蒙德' },
-        { id: 'liyue', name: '璃月' },
-        { id: 'inazuma', name: '稻妻' },
-        { id: 'dragonspine', name: '龙脊雪山' },
-        { id: 'enkanomiya', name: '渊下宫' }
+        { id: 'mondstadt', name: '蒙德', latlng: [1700, -3800] },
+        { id: 'liyue', name: '璃月', latlng: [0, 0] },
+        { id: 'inazuma', name: '稻妻', latlng: [6500, 3600] },
+        { id: 'dragonspine', name: '龙脊雪山', latlng: [1600, -2200] },
+        { id: 'enkanomiya', name: '渊下宫', latlng: [0, 0] }
       ],
       currentRegion: 'mondstadt',
       currentRegionName: '蒙德'
@@ -152,6 +153,8 @@ export default Vue.extend({
         this.posX = e.latlng.lat
         this.posY = e.latlng.lng
       })
+      // Make map object can be used in methods
+      this.mapObject = mapObject
     })
   },
   methods: {
@@ -160,9 +163,10 @@ export default Vue.extend({
       return require(`~/assets/images/btn_switch_${id}${active}.png`)
     },
     // switch region on map
-    selectRegion ({ id, name } : { id: string, name: string}) {
+    selectRegion ({ id, name, latlng } : { id: string, name: string, latlng: Array<Number>}) {
       this.currentRegion = id
       this.currentRegionName = name
+      this.mapObject.setView(latlng, 0)
     }
   }
 })
