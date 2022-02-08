@@ -4,7 +4,7 @@
       <l-map
         v-if="mapReady"
         ref="mapi"
-        :zoom="4"
+        :zoom="-3"
         :center="[2576, 1742]"
         :zoom-delta="0"
         :zoom-snap="0.5"
@@ -22,20 +22,17 @@
             </p>
           </div>
         </l-control>
-        <l-control id="location-detail-card-wrapper" position="topright">
-          <div id="location-detail-card">
-            <p>owo</p>
-          </div>
-        </l-control>
-        <l-control id="nav-wrapper" position="topleft">
-          <div id="nav">
-            <div class="flex flex-col ml-52 mt-10 w-full text-white">
-              {{ currentRegionName }}
+        <l-control class="nav-wrapper shadow-md" style="margin-top: 0" position="topleft">
+          <div class="flex text-white">
+            <div class="flex bg-gradient-to-r from-gray-700 w-screen h-12 items-center ">
+              <div class="flex flex-col justify-end ml-8 text-yellow-200 text-lg">
+                {{ currentRegionName }} > {{ subRegionName }}
+              </div>
             </div>
           </div>
         </l-control>
-        <l-control class="nav-wrapper" position="topleft">
-          <div class="flex flex-col justify-between">
+        <l-control class="nav-wrapper" style="margin-top: 8rem" position="topleft">
+          <div class="flex flex-col justify-between ml-4">
             <div class="flex flex-col location-btn">
               <button v-for="r in regions" :key="r.id" @click="selectRegion(r)">
                 <img name="r.name" :src="getRegionButtonImage(r.id)">
@@ -74,17 +71,19 @@ export default Vue.extend({
       mapCRS: null as unknown as L.CRS,
       tileLayer: null as unknown as L.TileLayer,
       mapReady: false,
+      mapObject: null as unknown as L.Map,
       posX: 0,
       posY: 0,
       regions: [
-        { id: 'mondstadt', name: '蒙德' },
-        { id: 'liyue', name: '璃月' },
-        { id: 'inazuma', name: '稻妻' },
-        { id: 'dragonspine', name: '龙脊雪山' },
-        { id: 'enkanomiya', name: '渊下宫' }
+        { id: 'mondstadt', name: '蒙德', latlng: [1700, -3800] },
+        { id: 'liyue', name: '璃月', latlng: [0, 0] },
+        { id: 'inazuma', name: '稻妻', latlng: [6500, 3600] },
+        { id: 'dragonspine', name: '龙脊雪山', latlng: [1600, -2200] },
+        { id: 'enkanomiya', name: '渊下宫', latlng: [-1000, -4700] }
       ],
       currentRegion: 'mondstadt',
-      currentRegionName: '蒙德'
+      currentRegionName: '蒙德',
+      subRegionName: '西风教堂'
     }
   },
   mounted () {
@@ -119,9 +118,17 @@ export default Vue.extend({
     })
 
     const TileLayerClass = this.$L.TileLayer.extend({
-      getTileUrl (coords: L.Coords) {
+      getTileUrl: (coords: L.Coords) => {
         const [x, y, z] = [coords.x, coords.y, coords.z + 13]
-        return `https://assets.yuanshen.site/tiles_twt/${z}/${x}_${y}.png`
+        if (this.currentRegion === 'enkanomiya') {
+          if (x >= 0 && x <= 3 && y >= 0 && y <= 3) {
+            return `enkanomiya/${x}_${y}.png`
+          } else {
+            return 'enkanomiya/3_3.png'
+          }
+        } else {
+          return `https://assets.yuanshen.site/tiles_twt/${z}/${x}_${y}.png`
+        }
       },
       reuseTiles: true
     })
@@ -151,6 +158,8 @@ export default Vue.extend({
         this.posX = e.latlng.lat
         this.posY = e.latlng.lng
       })
+      // Make map object can be used in methods
+      this.mapObject = mapObject
     })
   },
   methods: {
@@ -159,9 +168,16 @@ export default Vue.extend({
       return require(`~/assets/images/btn_switch_${id}${active}.png`)
     },
     // switch region on map
-    selectRegion ({ id, name }: { id: string; name: string }) {
+    selectRegion ({ id, name, latlng } : { id: string, name: string, latlng: number[]}) {
       this.currentRegion = id
       this.currentRegionName = name
+
+      this.mapObject.setView(latlng as [number, number], -1)
+
+      // temp zoom level to show enkanomiya
+      if (id === 'enkanomiya') {
+        this.mapObject.setZoom(-2)
+      }
     }
   }
 })

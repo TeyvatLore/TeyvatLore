@@ -60,5 +60,8 @@ export default {
 
   router: {
     base: process.env.NUXT_ROUTER_BASE || '/'
-  }
+  },
+
+  // tailwind config
+  configPath: '~/tailwind.config.js'
 }
