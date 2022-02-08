@@ -21,6 +21,7 @@
             </p>
           </div>
         </l-control>
+        <SideNavigator />
       </l-map>
     </client-only>
   </div>
@@ -29,12 +30,16 @@
 <script lang="ts">
 
 import Vue from 'vue'
+import SideNavigator from '~/components/SideNavigator.vue'
 
 const mapCenter = [3568, 6286]
 const mapSize = [12288, 15360]
 
 export default Vue.extend({
   name: 'IndexPage',
+  components: {
+    SideNavigator
+  },
   async asyncData ({ $content }) {
     const markers = await $content('markers').fetch()
     return {

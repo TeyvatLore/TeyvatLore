@@ -102,3 +102,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# DarckLH's personal assests directory
+rmdarck_assests
