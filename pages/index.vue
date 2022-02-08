@@ -27,17 +27,18 @@
             <p>owo</p>
           </div>
         </l-control>
-        <l-control class="nav-wrapper shadow-md" style="margin-top: 0" position="topleft">
-          <div class="flex text-white">
-            <div class="flex bg-gradient-to-r from-gray-700 w-screen h-12 items-center ">
-              <div class="flex flex-col justify-end ml-8 text-yellow-200 text-lg">
-                {{ currentRegionName }} > {{ subRegionName }}
-              </div>
+        <l-control id="nav-wrapper" position="topleft">
+          <div id="nav">
+            <div class="flex flex-col ml-48 mt-10 w-full text-white text-lg">
+              {{ currentRegionName }} > {{ subRegionName }}
             </div>
           </div>
         </l-control>
-        <l-control class="nav-wrapper" style="margin-top: 8rem" position="topleft">
-          <div class="flex flex-col justify-between ml-4">
+        <l-control
+          class="nav-wrapper"
+          position="topleft"
+        >
+          <div class="flex flex-col justify-between">
             <div class="flex flex-col location-btn">
               <button v-for="r in regions" :key="r.id" @click="selectRegion(r)">
                 <img name="r.name" :src="getRegionButtonImage(r.id)">
@@ -173,7 +174,15 @@ export default Vue.extend({
       return require(`~/assets/images/btn_switch_${id}${active}.png`)
     },
     // switch region on map
-    selectRegion ({ id, name, latlng } : { id: string, name: string, latlng: number[]}) {
+    selectRegion ({
+      id,
+      name,
+      latlng
+    }: {
+      id: string;
+      name: string;
+      latlng: number[];
+    }) {
       this.currentRegion = id
       this.currentRegionName = name
 
@@ -194,7 +203,7 @@ export default Vue.extend({
 }
 
 #location-detail-card-wrapper {
-    margin-right: 0;
+  margin-right: 0;
 }
 
 #location-detail-card {
@@ -205,10 +214,10 @@ export default Vue.extend({
   margin: 0;
 }
 
-#nav{
+#nav {
   @apply flex flex-col w-screen;
   height: 147px;
-  background: url('~@/assets/images/nav_logo_bg.png') no-repeat;
+  background: url("~@/assets/images/nav_logo_bg.png") no-repeat;
 }
 
 .location-btn img {
