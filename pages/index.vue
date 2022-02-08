@@ -27,7 +27,7 @@
             <p>owo</p>
           </div>
         </l-control>
-        <l-control id="nav-wrapper" position="topleft">
+        <l-control class="nav-wrapper" position="topleft">
           <div id="nav">
             <div class="flex flex-col ml-48 mt-10 w-full text-white text-lg">
               {{ currentRegionName }} > {{ subRegionName }}
@@ -46,10 +46,10 @@
             </div>
           </div>
         </l-control>
-        <l-control class="nav-wrapper" position="bottomleft">
+        <l-control id="other-buttons" class="nav-wrapper" position="bottomleft">
           <div class="flex flex-col">
-            <button>二维码</button>
-            <button>分享</button>
+            <button id="qr_code" />
+            <button id="share" />
           </div>
         </l-control>
       </l-map>
@@ -210,8 +210,13 @@ export default Vue.extend({
   @apply flex flex-col z-10;
 }
 
-#nav-wrapper {
+.nav-wrapper {
   margin: 0;
+}
+
+#other-buttons button{
+  height: 36px;
+  width: 36px;
 }
 
 #nav {
@@ -229,5 +234,21 @@ export default Vue.extend({
   @apply flex flex-col;
   /* avoid use inline color, use color palette */
   background-color: rgba(66, 101, 136, 0.5);
+}
+
+#qr_code{
+  background: url("~@/assets/images/btn_qrcode.png") no-repeat;
+}
+
+#qr_code:hover{
+  background: url("~@/assets/images/btn_qrcode_active.png") no-repeat;
+}
+
+#share{
+  background: url("~@/assets/images/btn_share.png") no-repeat;
+}
+
+#share:hover{
+  background: url("~@/assets/images/btn_share_active.png") no-repeat;
 }
 </style>
