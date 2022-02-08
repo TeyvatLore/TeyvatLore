@@ -4,7 +4,7 @@
       <l-map
         v-if="mapReady"
         ref="mapi"
-        :zoom="4"
+        :zoom="-3"
         :center="[2576, 1742]"
         :zoom-delta="0"
         :zoom-snap="0.5"
@@ -22,18 +22,17 @@
             </p>
           </div>
         </l-control>
-        <l-control class="nav-wrapper" position="topleft">
+        <l-control class="nav-wrapper shadow-md" style="margin-top: 0" position="topleft">
           <div class="flex text-white">
-            <h1 class="text-xl">
-              图研所
-            </h1>
-            <div class="flex flex-col justify-end ml-8">
-              {{ currentRegionName }}
+            <div class="flex bg-gradient-to-r from-gray-700 w-screen h-12 items-center ">
+              <div class="flex flex-col justify-end ml-8 text-yellow-200 text-lg">
+                {{ currentRegionName }} > {{ subRegionName }}
+              </div>
             </div>
           </div>
         </l-control>
-        <l-control class="nav-wrapper" position="topleft">
-          <div class="flex flex-col justify-between">
+        <l-control class="nav-wrapper" style="margin-top: 8rem" position="topleft">
+          <div class="flex flex-col justify-between ml-4">
             <div class="flex flex-col location-btn">
               <button v-for="r in regions" :key="r.id" @click="selectRegion(r)">
                 <img
@@ -86,7 +85,8 @@ export default Vue.extend({
         { id: 'enkanomiya', name: '渊下宫', latlng: [0, 0] }
       ],
       currentRegion: 'mondstadt',
-      currentRegionName: '蒙德'
+      currentRegionName: '蒙德',
+      subRegionName: '西风教堂'
     }
   },
   mounted () {
@@ -166,7 +166,7 @@ export default Vue.extend({
     selectRegion ({ id, name, latlng } : { id: string, name: string, latlng: Array<Number>}) {
       this.currentRegion = id
       this.currentRegionName = name
-      this.mapObject.setView(latlng, 0)
+      this.mapObject.setView(latlng, -1)
     }
   }
 })
