@@ -1,8 +1,8 @@
 @font-face {
-    font-family: "汉仪文黑";
-    src: local("汉仪文黑"), url(~assets/fonts/汉仪文黑-85W.ttf) format("truetype");
+    font-family: "HYWenHei";
+    src: local("HYWenHei"), url(~assets/fonts/HYWenHei.ttf) format("truetype");
 }
 
 html {
-    font-family: "汉仪文黑";
+    font-family: "HYWenHei", sans-serif;
 }
