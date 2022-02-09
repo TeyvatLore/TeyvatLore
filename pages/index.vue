@@ -14,7 +14,7 @@
         :crs="mapCRS"
         :options="{ zoomControl: false }"
       >
-        <l-control position="bottomright">
+        <l-control position="topleft">
           <div>
             <p class="text-white">
               <b>Pos:</b>
@@ -22,9 +22,36 @@
             </p>
           </div>
         </l-control>
-        <l-control id="location-detail-card-wrapper" position="topright">
+        <l-control id="location-detail-wrapper" :class="!isDetailCardOpen && 'hide-card'" position="topright">
           <div id="location-detail-card">
-            <p>owo</p>
+            <img id="card-bg" src="~/assets/images/location_details_bg.png">
+            <div id="location-detail-card-content-wrapper">
+              <div id="location-detail-card-btn">
+                <button @click="toggleLocationDetailCard()">
+                  >
+                </button>
+              </div>
+              <div id="location-detail-card-content">
+                <div id="detail-header">
+                  <img class="w-full absolute" src="~/assets/images/阳炎.png">
+                  <p class="absolute right-0 bottom-0 text-6xl text-white z-20">
+                    阳炎之门
+                  </p>
+                </div>
+                <div id="location-detail-card-content-info">
+                  <p>something here</p>
+                  <p>something here</p>
+                  <p>something here</p>
+                  <p>something here</p>
+                  <p>something here</p>
+                  <p>something here</p>
+                  <p>something here</p>
+                  <p>something here</p>
+                  <p>something here</p>
+                  <p>something here</p>
+                </div>
+              </div>
+            </div>
           </div>
         </l-control>
         <l-control class="nav-wrapper" position="topleft">
@@ -34,10 +61,7 @@
             </div>
           </div>
         </l-control>
-        <l-control
-          class="nav-wrapper"
-          position="topleft"
-        >
+        <l-control class="nav-wrapper" position="topleft">
           <div class="flex flex-col justify-between">
             <div class="flex flex-col location-btn">
               <button v-for="r in regions" :key="r.id" @click="selectRegion(r)">
@@ -89,7 +113,8 @@ export default Vue.extend({
       ],
       currentRegion: 'mondstadt',
       currentRegionName: '蒙德',
-      subRegionName: '西风教堂'
+      subRegionName: '西风教堂',
+      isDetailCardOpen: true
     }
   },
   mounted () {
@@ -192,34 +217,71 @@ export default Vue.extend({
       if (id === 'enkanomiya') {
         this.mapObject.setZoom(-2)
       }
+    },
+    toggleLocationDetailCard () {
+      this.isDetailCardOpen = !this.isDetailCardOpen
     }
   }
 })
 </script>
 
 <style lang="postcss" scoped>
-/*overload the default font family inside of leaflet*/
-.leaflet-container{
-  font-family: "汉仪文黑";
-}
-
 #map-wrap {
   height: 91vh;
 }
 
-#location-detail-card-wrapper {
-  margin-right: 0;
+#location-detail-wrapper {
+  @apply m-0 relative;
 }
 
 #location-detail-card {
-  @apply flex flex-col z-10;
+  height: auto;
+  min-width: 574px;
+}
+
+#card-bg {
+  @apply absolute;
+  z-index: 5;
+  top: -3.75em;
+}
+
+#location-detail-card-content-wrapper {
+  @apply absolute flex right-0 mt-1 z-10;
+  height: 100%;
+}
+
+#detail-header {
+  @apply w-full relative;
+  min-height: 197px;
+}
+
+#location-detail-card-btn {
+  @apply text-4xl text-white mt-6;
+}
+
+#location-detail-card-content {
+  @apply flex flex-col items-center relative;
+  width: 475px;
+}
+
+#location-detail-card-content-info {
+  @apply w-11/12 mt-3 flex flex-col;
+  background-color: #ede7de;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+/*For hide the location details card*/
+.hide-card {
+  right: -39.75em;
 }
 
 .nav-wrapper {
   margin: 0;
+  font-family: "汉仪文黑";
 }
 
-#other-buttons button{
+#other-buttons button {
   height: 36px;
   width: 36px;
 }
@@ -241,19 +303,19 @@ export default Vue.extend({
   background-color: rgba(66, 101, 136, 0.5);
 }
 
-#qr_code{
+#qr_code {
   background: url("~@/assets/images/btn_qrcode.png") no-repeat;
 }
 
-#qr_code:hover{
+#qr_code:hover {
   background: url("~@/assets/images/btn_qrcode_active.png") no-repeat;
 }
 
-#share{
+#share {
   background: url("~@/assets/images/btn_share.png") no-repeat;
 }
 
-#share:hover{
+#share:hover {
   background: url("~@/assets/images/btn_share_active.png") no-repeat;
 }
 </style>
