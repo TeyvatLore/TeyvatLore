@@ -14,15 +14,11 @@
         :crs="mapCRS"
         :options="{ zoomControl: false }"
       >
-        <l-control position="topleft">
-          <div>
-            <p class="text-white">
-              <b>Pos:</b>
-              {{ posX }} {{ posY }}
-            </p>
-          </div>
-        </l-control>
-        <l-control id="location-detail-wrapper" :class="!isDetailCardOpen && 'hide-card'" position="topright">
+        <l-control
+          id="location-detail-wrapper"
+          :class="!isDetailCardOpen && 'hide-card'"
+          position="topright"
+        >
           <div id="location-detail-card">
             <img id="card-bg" src="~/assets/images/location_details_bg.png">
             <div id="location-detail-card-content-wrapper">
@@ -34,30 +30,74 @@
               <div id="location-detail-card-content">
                 <div id="detail-header">
                   <img class="w-full absolute" src="~/assets/images/阳炎.png">
-                  <p class="absolute right-0 bottom-0 text-6xl text-white z-20">
+                  <p id="card-title">
                     阳炎之门
                   </p>
                 </div>
                 <div id="location-detail-card-content-info">
-                  <p>something here</p>
-                  <p>something here</p>
-                  <p>something here</p>
-                  <p>something here</p>
-                  <p>something here</p>
-                  <p>something here</p>
-                  <p>something here</p>
-                  <p>something here</p>
-                  <p>something here</p>
-                  <p>something here</p>
+                  <div class="content-block">
+                    <h2>阳炎之门</h2>
+                    <p>
+                      阳炎之门是一扇利用阳炎现象制成的用于开起门后甬道的门。
+                    </p>
+                  </div>
+                  <img
+                    class="content-block"
+                    src="~/assets/images/divider.png"
+                  >
+                  <div class="content-block">
+                    <h2>建筑风格</h2>
+                    <p>
+                      阳炎之门的整体样式为石砌方柱拱形门，上有金纹装饰和浮雕，并且有幻想的荧光海底植物攀附其上，增加了建筑的历史厚重感。
+                    </p>
+                  </div>
+                  <img
+                    class="content-block"
+                    src="~/assets/images/divider.png"
+                  >
+                  <div class="content-block">
+                    <h2>链接</h2>
+                    <div id="link-block">
+                      <div class="ref-link">
+                        <a>阳炎之门考据1</a>
+                      </div>
+                      <div class="ref-link">
+                        <a>阳炎之门考据2</a>
+                      </div>
+                      <div class="ref-link">
+                        <a>阳炎之门考据3</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="w-full text-white text-lg">
+                  <p><span class="mx-3">&#x0003C;</span>渊下宫</p>
                 </div>
               </div>
             </div>
           </div>
         </l-control>
-        <l-control class="nav-wrapper" position="topleft">
-          <div id="nav">
-            <div class="flex flex-col ml-48 mt-10 w-full text-white text-lg">
-              {{ currentRegionName }} > {{ subRegionName }}
+        <l-control
+          class="nav-wrapper shadow-md"
+          style="margin-top: 0"
+          position="topleft"
+        >
+          <div class="flex text-white">
+            <div
+              class="
+                flex
+                bg-gradient-to-r
+                from-gray-700
+                w-screen
+                h-12
+                items-center
+              "
+            >
+              <div
+                class="flex flex-col justify-end ml-8 text-yellow-200 text-lg"
+              >
+                {{ currentRegionName }} > {{ subRegionName }}
+              </div>
             </div>
           </div>
         </l-control>
@@ -68,6 +108,14 @@
                 <img name="r.name" :src="getRegionButtonImage(r.id)">
               </button>
             </div>
+          </div>
+        </l-control>
+        <l-control position="topleft">
+          <div>
+            <p class="text-white">
+              <b>Pos:</b>
+              {{ posX }} {{ posY }}
+            </p>
           </div>
         </l-control>
         <l-control id="other-buttons" class="nav-wrapper" position="bottomleft">
@@ -237,6 +285,8 @@ export default Vue.extend({
 #location-detail-card {
   height: auto;
   min-width: 574px;
+  font-family: "HYWenHei", sans-serif;
+  color: #484139;
 }
 
 #card-bg {
@@ -255,6 +305,11 @@ export default Vue.extend({
   min-height: 197px;
 }
 
+#card-title {
+  @apply absolute right-0 bottom-0 text-6xl text-white z-20;
+  font-family: "HYWenHei", sans-serif;
+}
+
 #location-detail-card-btn {
   @apply text-4xl text-white mt-6;
 }
@@ -262,13 +317,52 @@ export default Vue.extend({
 #location-detail-card-content {
   @apply flex flex-col items-center relative;
   width: 475px;
+  height: 645px;
 }
 
 #location-detail-card-content-info {
-  @apply w-11/12 mt-3 flex flex-col;
+  @apply mt-2 flex flex-col p-1;
+  width: 97%;
   background-color: #ede7de;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+  flex-grow: 1;
+}
+
+.content-block {
+  @apply my-1;
+}
+
+.content-block > h2 {
+  @apply text-lg;
+}
+
+.content-block > p {
+  @apply mx-4;
+}
+
+#link-block {
+  @apply flex flex-col;
+}
+
+.link-bg-size {
+  padding-left: 5.25em;
+  background-size: auto;
+  background-size: 100% 100%;
+}
+
+.ref-link {
+  @apply p-4 link-bg-size;
+  background-image: url("~@/assets/images/btn_link.png");
+}
+
+.ref-link > a {
+  @apply text-white w-full;
+}
+
+.ref-link:hover {
+  @apply p-4 link-bg-size;
+  background-image: url("~@/assets/images/btn_link_active.png");
 }
 
 /*For hide the location details card*/
@@ -278,7 +372,7 @@ export default Vue.extend({
 
 .nav-wrapper {
   margin: 0;
-  font-family: "汉仪文黑";
+  font-family: "HYWenHei", sans-serif;
 }
 
 #other-buttons button {
