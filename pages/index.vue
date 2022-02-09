@@ -61,7 +61,7 @@
 import Vue from 'vue'
 
 const mapCenter = [3568, 6286]
-const mapSize = [12288, 15360]
+const mapSize = [30720, 30720]
 
 export default Vue.extend({
   name: 'IndexPage',
@@ -125,7 +125,7 @@ export default Vue.extend({
 
     const TileLayerClass = this.$L.TileLayer.extend({
       getTileUrl: (coords: L.Coords) => {
-        const [x, y, z] = [coords.x, coords.y, coords.z + 13]
+        const [x, y, z] = [coords.x, coords.y, coords.z + 15]
         if (this.currentRegion === 'enkanomiya') {
           if (x >= 0 && x <= 3 && y >= 0 && y <= 3) {
             return `enkanomiya/${x}_${y}.png`
@@ -133,7 +133,7 @@ export default Vue.extend({
             return 'enkanomiya/3_3.png'
           }
         } else {
-          return `https://assets.yuanshen.site/tiles_twt/${z}/${x}_${y}.png`
+          return `https://teyvatlore.github.io/MapTile/teyvat/${z}/${x}_${y}.jpg`
         }
       },
       reuseTiles: true
@@ -142,9 +142,9 @@ export default Vue.extend({
     // @ts-ignore
     this.tileLayer = new TileLayerClass('', {
       maxZoom: 10,
-      minZoom: -6,
+      minZoom: -8,
       maxNativeZoom: 0,
-      minNativeZoom: -3,
+      minNativeZoom: -8,
       bounds: this.$L.latLngBounds(
         this.$L.latLng(-mapCenter[0], -mapCenter[1]),
         this.$L.latLng(mapSize[0] - mapCenter[0], mapSize[1] - mapCenter[1])
