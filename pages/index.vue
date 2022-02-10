@@ -4,12 +4,12 @@
       <l-map
         v-if="mapReady"
         ref="mapi"
-        :zoom="-3"
-        :center="[2576, 1742]"
+        :zoom="-1"
+        :center="regions[0].latlng"
         :zoom-delta="0"
         :zoom-snap="0.5"
-        :max-zoom="2"
-        :min-zoom="-4"
+        :max-zoom="maxZoom"
+        :min-zoom="minZoom"
         :max-bounds="maxBounds"
         :crs="mapCRS"
         :options="{ zoomControl: false }"
@@ -76,14 +76,16 @@ export default Vue.extend({
       tileLayer: null as unknown as L.TileLayer,
       mapReady: false,
       mapObject: null as unknown as L.Map,
+      maxZoom: 2,
+      minZoom: -4,
       posX: 0,
       posY: 0,
       regions: [
-        { id: 'mondstadt', name: '蒙德', latlng: [1700, -3800] },
-        { id: 'liyue', name: '璃月', latlng: [0, 0] },
-        { id: 'inazuma', name: '稻妻', latlng: [6500, 3600] },
-        { id: 'dragonspine', name: '龙脊雪山', latlng: [1600, -2200] },
-        { id: 'enkanomiya', name: '渊下宫', latlng: [-1000, -4700] }
+        { id: 'mondstadt', name: '蒙德', latlng: [14316, 5458] },
+        { id: 'liyue', name: '璃月', latlng: [12020, 11340] },
+        { id: 'inazuma', name: '稻妻', latlng: [21781, 16546] },
+        { id: 'dragonspine', name: '龙脊雪山', latlng: [14461, 8048] },
+        { id: 'enkanomiya', name: '渊下宫', latlng: [-3100, -5839] }
       ],
       currentRegion: 'mondstadt',
       currentRegionName: '蒙德',
@@ -179,12 +181,13 @@ export default Vue.extend({
     selectRegion ({ id, name, latlng } : { id: string, name: string, latlng: number[]}) {
       this.currentRegion = id
       this.currentRegionName = name
-
       this.mapObject.setView(latlng as [number, number], -1)
-
-      // temp zoom level to show enkanomiya
       if (id === 'enkanomiya') {
-        this.mapObject.setZoom(-2)
+        this.maxZoom = 2
+        this.minZoom = -2
+      } else {
+        this.maxZoom = 2
+        this.minZoom = -4
       }
     }
   }
