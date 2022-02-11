@@ -9,7 +9,8 @@
       </div>
       <div id="location-detail-card-content">
         <div id="detail-header">
-          <img class="w-full absolute" src="~/assets/images/阳炎.png">
+          <img class="w-full absolute" src="~/assets/images/location_detail_card_header_pattern.png">
+          <img class="w-full absolute z-10" src="~/assets/images/阳炎.png">
           <p id="card-title">
             {{ details.title }}
           </p>
