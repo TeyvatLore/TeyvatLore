@@ -49,9 +49,13 @@
             <button>分享</button>
           </div>
         </l-control>
+        <l-control position="topleft" :style="cardPopoutPos + '; position: absolute'">
+          <div>
+            <img :src="cardImage">
+          </div>
+        </l-control>
       </l-map>
     </client-only>
-    <img src="~/assets/images/CT_sun_flame_gate.png" style="display: none">
   </div>
 </template>
 
@@ -71,15 +75,34 @@ export default Vue.extend({
   },
   data () {
     return {
+      // markers for local test
+      tempMarkers: [
+        {
+          name: '玉京台',
+          pos: [12020, 11340],
+          image: 'landMarkIcon/常夜灵庙天光.png',
+          icon: 'landMarkIcon/灵庙处天光.png'
+        },
+        {
+          name: '西风教堂',
+          pos: [14316, 5458],
+          image: 'landMarkIcon/CT_sun_flame_gate.png',
+          icon: 'landMarkIcon/sun_flame_icon_off.png'
+        }
+      ],
       maxBounds: null as unknown as L.LatLngBounds,
       mapCRS: null as unknown as L.CRS,
       tileLayer: null as unknown as L.TileLayer,
       mapReady: false,
       mapObject: null as unknown as L.Map,
       maxZoom: 2,
-      minZoom: -4,
+      minZoom: -3,
       posX: 0,
       posY: 0,
+      containerPointX: 0,
+      containerPointY: 0,
+      cardX: 0,
+      cardY: 0,
       regions: [
         { id: 'mondstadt', name: '蒙德', latlng: [14316, 5458] },
         { id: 'liyue', name: '璃月', latlng: [12020, 11340] },
@@ -89,7 +112,16 @@ export default Vue.extend({
       ],
       currentRegion: 'mondstadt',
       currentRegionName: '蒙德',
-      subRegionName: '西风教堂'
+      subRegionName: '西风教堂',
+      cardStylesheets: '',
+      cardPopoutPos: '',
+      cardImage: '',
+      foucsLandMarker: {
+        name: '',
+        pos: [0, 0],
+        image: '',
+        icon: ''
+      }
     }
   },
   mounted () {
@@ -151,22 +183,35 @@ export default Vue.extend({
       )
     })
 
-    const popup = this.$L.popup()
-      .setContent('<div style="width: 300px">www</div>')
-
     this.mapReady = true
     this.$nextTick(function () {
       const mapObject = (this.$refs.mapi as any).mapObject
       mapObject.addLayer(this.tileLayer)
-      for (const m of (this as any).markers) {
+      for (const m of (this as any).tempMarkers) {
+        const icon = new this.$L.Icon({
+          // Marker's property named icon can't be null
+          iconUrl: m.icon,
+          iconAnchor: [30, 75]
+        })
         this.$L
           .marker((m as any).pos, { title: (m as any).name })
-          .bindPopup(popup)
+          .setIcon(icon)
+          .on('click', (ev : L.LeafletMouseEvent) => {
+            this.foucsLandMarker = m
+            this.cardX = ev.containerPoint.x + 10
+            this.cardY = ev.containerPoint.y - 120
+            this.cardPopoutPos = 'left: ' + this.cardX + 'px; top: ' + this.cardY + 'px'
+            this.cardImage = m.image
+          })
           .addTo(mapObject)
       }
       mapObject.on('mousemove', (e: L.LeafletMouseEvent) => {
         this.posX = e.latlng.lat
         this.posY = e.latlng.lng
+        const coords = this.mapObject.latLngToContainerPoint(new this.$L.LatLng(this.foucsLandMarker.pos[0], this.foucsLandMarker.pos[1]))
+        coords.x += 10
+        coords.y -= 120
+        this.cardPopoutPos = 'left: ' + coords.x + 'px; top: ' + coords.y + 'px'
       })
       // Make map object can be used in methods
       this.mapObject = mapObject
@@ -189,6 +234,9 @@ export default Vue.extend({
         this.maxZoom = 2
         this.minZoom = -4
       }
+    },
+    landMarkCard (marker : Object) {
+      alert(marker.toString)
     }
   }
 })
@@ -212,5 +260,8 @@ export default Vue.extend({
   @apply flex flex-col;
   /* avoid use inline color, use color palette */
   background-color: rgba(66, 101, 136, 0.5);
+}
+
+.landMarkCard-unfocus {
 }
 </style>
