@@ -1,6 +1,7 @@
 ---
 title: 阳炎之门
 world: Enkanomiya
+heroImage: /images/sunfire.png
 position: [0, 0]
 ---
 
