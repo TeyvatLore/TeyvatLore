@@ -14,39 +14,43 @@
         :crs="mapCRS"
         :options="{ zoomControl: false }"
       >
-        <l-control>
-          <div>
-            <p>
-              <b>Pos:</b>
-              {{ posX }} {{ posY }}
-            </p>
-          </div>
+        <l-control id="location-detail-wrapper" position="topright">
+          <LocationDetailsCard :details="markerData" />
         </l-control>
-        <l-control class="nav-wrapper shadow-md" style="margin-top: 0" position="topleft">
+        <l-control
+          class="nav-wrapper shadow-md"
+          style="margin-top: 0"
+          position="topleft"
+        >
           <div class="flex text-white">
-            <div class="flex bg-gradient-to-r from-gray-700 w-screen h-12 items-center ">
+            <div class="flex bg-gradient-to-r from-gray-700 w-screen h-12 items-center">
               <div class="flex flex-col justify-end ml-8 text-yellow-200 text-lg">
                 {{ currentRegionName }} > {{ subRegionName }}
               </div>
             </div>
           </div>
         </l-control>
-        <l-control class="nav-wrapper" style="margin-top: 8rem" position="topleft">
-          <div class="flex flex-col justify-between ml-4">
+        <l-control class="nav-wrapper" position="topleft">
+          <div class="flex flex-col justify-between">
             <div class="flex flex-col location-btn">
               <button v-for="r in regions" :key="r.id" @click="selectRegion(r)">
-                <img
-                  name="r.name"
-                  :src="getRegionButtonImage(r.id)"
-                >
+                <img name="r.name" :src="getRegionButtonImage(r.id)">
               </button>
             </div>
           </div>
         </l-control>
-        <l-control class="nav-wrapper" position="bottomleft">
-          <div id="other-btn">
-            <button>二维码</button>
-            <button>分享</button>
+        <l-control id="other-buttons" class="nav-wrapper" position="bottomleft">
+          <div class="flex">
+            <div class="flex flex-col">
+              <button id="qr_code" />
+              <button id="share" />
+            </div>
+            <div class="flex items-end">
+              <p class="text-white">
+                <b>Pos:</b>
+                {{ posX }} {{ posY }}
+              </p>
+            </div>
           </div>
         </l-control>
         <l-control position="topleft" :style="cardPopoutPos + '; position: absolute'">
@@ -69,8 +73,10 @@ export default Vue.extend({
   name: 'IndexPage',
   async asyncData ({ $content }) {
     const markers = await $content('markers').fetch()
+    const markerData = await $content('marker/SunfireGate').fetch()
     return {
-      markers: (markers as any).markers
+      markers: (markers as any).markers,
+      markerData
     }
   },
   data () {
@@ -121,7 +127,8 @@ export default Vue.extend({
         pos: [0, 0],
         image: '',
         icon: ''
-      }
+      },
+      markerData: { title: '', body: [] }
     }
   },
   mounted () {
@@ -218,7 +225,7 @@ export default Vue.extend({
     })
   },
   methods: {
-    getRegionButtonImage (id : string) {
+    getRegionButtonImage (id: string) {
       const active = id === this.currentRegion ? '_active' : ''
       return require(`~/assets/images/btn_switch_${id}${active}.png`)
     },
@@ -247,8 +254,18 @@ export default Vue.extend({
   height: 91vh;
 }
 
+#location-detail-wrapper {
+  @apply m-0 relative;
+}
+
 .nav-wrapper {
-  margin-left: 0;
+  @apply m-0;
+  font-family: "HYWenHei", sans-serif;
+}
+
+#other-buttons button {
+  height: 36px;
+  width: 36px;
 }
 
 .location-btn img {
@@ -258,10 +275,24 @@ export default Vue.extend({
 
 .sideNav {
   @apply flex flex-col;
-  /* avoid use inline color, use color palette */
   background-color: rgba(66, 101, 136, 0.5);
 }
 
 .landMarkCard-unfocus {
+}
+#qr_code {
+  background: url("~@/assets/images/btn_qrcode.png") no-repeat;
+}
+
+#qr_code:hover {
+  background: url("~@/assets/images/btn_qrcode_active.png") no-repeat;
+}
+
+#share {
+  background: url("~@/assets/images/btn_share.png") no-repeat;
+}
+
+#share:hover {
+  background: url("~@/assets/images/btn_share_active.png") no-repeat;
 }
 </style>
