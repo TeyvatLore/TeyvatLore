@@ -16,25 +16,7 @@
           </p>
         </div>
         <div id="location-detail-card-content-info">
-          <div v-for="s in details.sections" :key="s.id">
-            <div class="content-block">
-              <h2>{{ s.title }}</h2>
-              <p>{{ s.description }}</p>
-            </div>
-            <img class="content-block" src="~/assets/images/divider.png">
-          </div>
-          <div class="content-block">
-            <h2>链接</h2>
-            <div id="link-block">
-              <div
-                v-for="ref in details.refs"
-                :key="ref.id"
-                class="ref-link"
-              >
-                <a :href="ref.link">{{ ref.title }}</a>
-              </div>
-            </div>
-          </div>
+          <nuxt-content :document="details" />
         </div>
         <div class="w-full text-white text-lg">
           <p><span class="mx-3">&#x0003C;</span>渊下宫</p>
@@ -46,6 +28,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import '~/assets/styles/markdown.css'
+
 export default Vue.extend({
   props: ['details'],
   data () {
@@ -123,35 +107,8 @@ export default Vue.extend({
   @apply my-1;
 }
 
-.content-block > h2 {
-  @apply text-lg;
-}
-
-.content-block > p {
-  @apply mx-4;
-}
-
 #link-block {
   @apply flex flex-col;
-}
-
-.link-bg-size {
-  padding-left: 5.25em;
-  background-size: 100% 100%;
-}
-
-.ref-link {
-  @apply p-4 link-bg-size;
-  background-image: url("~@/assets/images/btn_link.png");
-}
-
-.ref-link > a {
-  @apply text-white w-full;
-}
-
-.ref-link:hover {
-  @apply p-4 link-bg-size;
-  background-image: url("~@/assets/images/btn_link_active.png");
 }
 
 /*For hide the location details card*/

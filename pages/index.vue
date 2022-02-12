@@ -15,7 +15,7 @@
         :options="{ zoomControl: false }"
       >
         <l-control id="location-detail-wrapper" position="topright">
-          <LocationDetailsCard :details="locationDetail" />
+          <LocationDetailsCard :details="markerData" />
         </l-control>
         <l-control
           class="nav-wrapper shadow-md"
@@ -68,8 +68,10 @@ export default Vue.extend({
   name: 'IndexPage',
   async asyncData ({ $content }) {
     const markers = await $content('markers').fetch()
+    const markerData = await $content('marker/SunfireGate').fetch()
     return {
-      markers: (markers as any).markers
+      markers: (markers as any).markers,
+      markerData
     }
   },
   data () {
@@ -91,40 +93,7 @@ export default Vue.extend({
       currentRegion: 'mondstadt',
       currentRegionName: '蒙德',
       subRegionName: '西风教堂',
-      locationDetail: {
-        title: '阳炎之门',
-        sections: [
-          {
-            id: 0,
-            title: '阳炎之门',
-            description:
-              '阳炎之门是一扇利用阳炎现象制成的用于开起门后甬道的门。'
-          },
-          {
-            id: 1,
-            title: '建筑风格',
-            description:
-              '阳炎之门的整体样式为石砌方柱拱形门，上有金纹装饰和浮雕，并且有幻想的荧光海底植物攀附其上，增加了建筑的历史厚重感。'
-          }
-        ],
-        refs: [
-          {
-            id: 0,
-            title: '阳炎之门考据1',
-            link: '#'
-          },
-          {
-            id: 1,
-            title: '阳炎之门考据2',
-            link: '#'
-          },
-          {
-            id: 2,
-            title: '阳炎之门考据3',
-            link: '#'
-          }
-        ]
-      }
+      markerData: { title: '', body: [] }
     }
   },
   mounted () {
@@ -209,7 +178,7 @@ export default Vue.extend({
       return require(`~/assets/images/btn_switch_${id}${active}.png`)
     },
     // switch region on map
-    selectRegionselectRegion ({ id, name, latlng } : { id: string, name: string, latlng: number[]}) {
+    selectRegion ({ id, name, latlng } : { id: string, name: string, latlng: number[]}) {
       this.currentRegion = id
       this.currentRegionName = name
 

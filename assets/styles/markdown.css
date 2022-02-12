@@ -1,0 +1,16 @@
+.nuxt-content h2 {
+  @apply text-lg;
+}
+
+.nuxt-content p {
+  @apply mx-4;
+}
+
+.nuxt-content hr {
+    display: block;
+    height: 27px;
+    box-sizing: border-box;
+    border-image-source: url("~@/assets/images/divider.png");
+    border-image-slice: 27 27 0;
+    border-image-width: auto;
+}
