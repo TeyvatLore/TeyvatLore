@@ -129,7 +129,7 @@ export default Vue.extend({
           // } else {
           //   return 'enkanomiya/3_3.png'
           // }
-          return `enkanomiya/${z}/${y}_${x}.png`
+          return `https://raw.githubusercontent.com/TeyvatLore/MapTile/gh-pages/teyvat/enkanomiya/${z}/${y}_${x}.png`
         } else {
           return `https://assets.yuanshen.site/tiles_twt/${z}/${x}_${y}.png`
         }
