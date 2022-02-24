@@ -124,11 +124,12 @@ export default Vue.extend({
       getTileUrl: (coords: L.Coords) => {
         const [x, y, z] = [coords.x, coords.y, coords.z + 13]
         if (this.currentRegion === 'enkanomiya') {
-          if (x >= 0 && x <= 3 && y >= 0 && y <= 3) {
-            return `enkanomiya/${x}_${y}.png`
-          } else {
-            return 'enkanomiya/3_3.png'
-          }
+          // if (x >= 0 && x <= 3 && y >= 0 && y <= 3) {
+          //   return `enkanomiya/${x}_${y}.png`
+          // } else {
+          //   return 'enkanomiya/3_3.png'
+          // }
+          return `enkanomiya/${z}/${y}_${x}.png`
         } else {
           return `https://assets.yuanshen.site/tiles_twt/${z}/${x}_${y}.png`
         }
