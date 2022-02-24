@@ -1,0 +1,8 @@
+@font-face {
+    font-family: "HYWenHei";
+    src: local("HYWenHei"), url(~assets/fonts/HYWenHei.ttf) format("truetype");
+}
+
+html {
+    font-family: "HYWenHei", sans-serif;
+}
