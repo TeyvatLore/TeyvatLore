@@ -194,7 +194,7 @@ export default Vue.extend({
     this.$nextTick(function () {
       const mapObject = (this.$refs.mapi as any).mapObject
       mapObject.addLayer(this.tileLayer)
-      for (const m of (this as any).tempMarkers) {
+      for (const m of (this as any).markers) {
         const icon = new this.$L.Icon({
           // Marker's property named icon can't be null
           iconUrl: m.icon,

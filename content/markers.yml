@@ -1,5 +1,17 @@
 markers:
   - name: 北风的王狼，奔狼的领主
     pos: [880, -3480]
+    image: 'landMarkIcon/常夜灵庙天光.png'
+    icon: 'landMarkIcon/灵庙处天光.png'
   - name: 裂空的魔龙
     pos: [353, -4360]
+    image: 'landMarkIcon/常夜灵庙天光.png'
+    icon: 'landMarkIcon/灵庙处天光.png'
+  - name: '玉京台'
+    pos: [12020, 11340]
+    image: 'landMarkIcon/常夜灵庙天光.png'
+    icon: 'landMarkIcon/灵庙处天光.png'
+  - name: '西风教堂'
+    pos: [14316, 5458]
+    image: 'landMarkIcon/CT_sun_flame_gate.png'
+    icon: 'landMarkIcon/sun_flame_icon_off.png'
