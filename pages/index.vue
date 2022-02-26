@@ -81,21 +81,6 @@ export default Vue.extend({
   },
   data () {
     return {
-      // markers for local test
-      tempMarkers: [
-        {
-          name: '玉京台',
-          pos: [12020, 11340],
-          image: 'landMarkIcon/常夜灵庙天光.png',
-          icon: 'landMarkIcon/灵庙处天光.png'
-        },
-        {
-          name: '西风教堂',
-          pos: [14316, 5458],
-          image: 'landMarkIcon/CT_sun_flame_gate.png',
-          icon: 'landMarkIcon/sun_flame_icon_off.png'
-        }
-      ],
       maxBounds: null as unknown as L.LatLngBounds,
       mapCRS: null as unknown as L.CRS,
       tileLayer: null as unknown as L.TileLayer,
@@ -119,10 +104,9 @@ export default Vue.extend({
       currentRegion: 'mondstadt',
       currentRegionName: '蒙德',
       subRegionName: '西风教堂',
-      cardStylesheets: '',
       cardPopoutPos: '',
       cardImage: '',
-      foucsLandMarker: {
+      focusLandMarker: {
         name: '',
         pos: [0, 0],
         image: '',
@@ -204,18 +188,19 @@ export default Vue.extend({
           .marker((m as any).pos, { title: (m as any).name })
           .setIcon(icon)
           .on('click', (ev : L.LeafletMouseEvent) => {
-            this.foucsLandMarker = m
+            this.focusLandMarker = m
             this.cardX = ev.containerPoint.x + 10
             this.cardY = ev.containerPoint.y - 120
             this.cardPopoutPos = 'left: ' + this.cardX + 'px; top: ' + this.cardY + 'px'
             this.cardImage = m.image
           })
+          .bindPopup('<div style="background: red; height: 50px; width: 50px;"></div>', { className: '' })
           .addTo(mapObject)
       }
       mapObject.on('mousemove', (e: L.LeafletMouseEvent) => {
         this.posX = e.latlng.lat
         this.posY = e.latlng.lng
-        const coords = this.mapObject.latLngToContainerPoint(new this.$L.LatLng(this.foucsLandMarker.pos[0], this.foucsLandMarker.pos[1]))
+        const coords = this.mapObject.latLngToContainerPoint(new this.$L.LatLng(this.focusLandMarker.pos[0], this.focusLandMarker.pos[1]))
         coords.x += 10
         coords.y -= 120
         this.cardPopoutPos = 'left: ' + coords.x + 'px; top: ' + coords.y + 'px'
