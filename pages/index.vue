@@ -65,6 +65,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import '@/assets/styles/marker.css'
 
 const mapCenter = [3568, 6286]
 const mapSize = [30720, 30720]
@@ -112,6 +113,12 @@ export default Vue.extend({
         image: '',
         icon: ''
       },
+      markers: [] as Array<{
+        pos: [number, number],
+        name: string,
+        icon: string,
+        image: string
+      }>,
       markerData: { title: '', body: [] }
     }
   },
@@ -178,23 +185,24 @@ export default Vue.extend({
     this.$nextTick(function () {
       const mapObject = (this.$refs.mapi as any).mapObject
       mapObject.addLayer(this.tileLayer)
-      for (const m of (this as any).markers) {
+
+      for (const m of this.markers) {
         const icon = new this.$L.Icon({
           // Marker's property named icon can't be null
           iconUrl: m.icon,
           iconAnchor: [30, 75]
         })
         this.$L
-          .marker((m as any).pos, { title: (m as any).name })
+          .marker(m.pos, { title: m.name })
           .setIcon(icon)
-          .on('click', (ev : L.LeafletMouseEvent) => {
-            this.focusLandMarker = m
-            this.cardX = ev.containerPoint.x + 10
-            this.cardY = ev.containerPoint.y - 120
-            this.cardPopoutPos = 'left: ' + this.cardX + 'px; top: ' + this.cardY + 'px'
-            this.cardImage = m.image
-          })
-          .bindPopup('<div style="background: red; height: 50px; width: 50px;"></div>', { className: '' })
+          // .on('click', (ev : L.LeafletMouseEvent) => {
+          //   this.focusLandMarker = m
+          //   this.cardX = ev.containerPoint.x + 10
+          //   this.cardY = ev.containerPoint.y - 120
+          //   this.cardPopoutPos = 'left: ' + this.cardX + 'px; top: ' + this.cardY + 'px'
+          //   this.cardImage = m.image
+          // })
+          .bindPopup(`<img src="${m.image}">`, { className: 'popup-marker-summary', closeButton: false })
           .addTo(mapObject)
       }
       mapObject.on('mousemove', (e: L.LeafletMouseEvent) => {
