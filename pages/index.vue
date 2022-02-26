@@ -131,8 +131,8 @@ export default Vue.extend({
       getTileUrl: (coords: L.Coords) => {
         const [x, y, z] = [coords.x, coords.y, coords.z + 15]
         if (this.currentRegion === 'enkanomiya') {
-          return `https://cdn.jsdelivr.net/gh/TeyvatLore/MapTile@gh-pages/teyvat/enkanomiya/${z}/${y}_${x}.png`
-          // return `https://raw.githubusercontent.com/TeyvatLore/MapTile/gh-pages/teyvat/enkanomiya/${z}/${y}_${x}.png`
+          return `https://cdn.jsdelivr.net/gh/TeyvatLore/MapTile@gh-pages/enkanomiya/${z}/${y}_${x}.png`
+          // return `https://raw.githubusercontent.com/TeyvatLore/MapTile/gh-pages/enkanomiya/${z}/${y}_${x}.png`
         } else {
           return `https://cdn.jsdelivr.net/gh/TeyvatLore/MapTile@gh-pages/teyvat/${z}/${x}_${y}.jpg`
           // return `https://teyvatlore.github.io/MapTile/teyvat/${z}/${x}_${y}.jpg`
