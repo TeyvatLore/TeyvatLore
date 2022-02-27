@@ -4,12 +4,12 @@
       <l-map
         v-if="mapReady"
         ref="mapi"
-        :zoom="-3"
-        :center="[2576, 1742]"
+        :zoom="-1"
+        :center="regions[0].latlng"
         :zoom-delta="0"
         :zoom-snap="0.5"
-        :max-zoom="2"
-        :min-zoom="-4"
+        :max-zoom="maxZoom"
+        :min-zoom="minZoom"
         :max-bounds="maxBounds"
         :crs="mapCRS"
         :options="{ zoomControl: false }"
@@ -53,6 +53,11 @@
             </div>
           </div>
         </l-control>
+        <l-control position="topleft" :style="cardPopoutPos + '; position: absolute'">
+          <div>
+            <img :src="cardImage">
+          </div>
+        </l-control>
       </l-map>
     </client-only>
   </div>
@@ -60,6 +65,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import '@/assets/styles/marker.css'
 
 const mapCenter = [3568, 6286]
 const mapSize = [30720, 30720]
@@ -81,18 +87,38 @@ export default Vue.extend({
       tileLayer: null as unknown as L.TileLayer,
       mapReady: false,
       mapObject: null as unknown as L.Map,
+      maxZoom: 2,
+      minZoom: -3,
       posX: 0,
       posY: 0,
+      containerPointX: 0,
+      containerPointY: 0,
+      cardX: 0,
+      cardY: 0,
       regions: [
-        { id: 'mondstadt', name: '蒙德', latlng: [1700, -3800] },
-        { id: 'liyue', name: '璃月', latlng: [0, 0] },
-        { id: 'inazuma', name: '稻妻', latlng: [6500, 3600] },
-        { id: 'dragonspine', name: '龙脊雪山', latlng: [1600, -2200] },
-        { id: 'enkanomiya', name: '渊下宫', latlng: [-1000, -4700] }
+        { id: 'mondstadt', name: '蒙德', latlng: [14316, 5458] },
+        { id: 'liyue', name: '璃月', latlng: [12020, 11340] },
+        { id: 'inazuma', name: '稻妻', latlng: [21781, 16546] },
+        { id: 'dragonspine', name: '龙脊雪山', latlng: [14461, 8048] },
+        { id: 'enkanomiya', name: '渊下宫', latlng: [-3100, -5839] }
       ],
       currentRegion: 'mondstadt',
       currentRegionName: '蒙德',
       subRegionName: '西风教堂',
+      cardPopoutPos: '',
+      cardImage: '',
+      focusLandMarker: {
+        name: '',
+        pos: [0, 0],
+        image: '',
+        icon: ''
+      },
+      markers: [] as Array<{
+        pos: [number, number],
+        name: string,
+        icon: string,
+        image: string
+      }>,
       markerData: { title: '', body: [] }
     }
   },
@@ -157,14 +183,33 @@ export default Vue.extend({
     this.$nextTick(function () {
       const mapObject = (this.$refs.mapi as any).mapObject
       mapObject.addLayer(this.tileLayer)
-      for (const m of (this as any).markers) {
+
+      for (const m of this.markers) {
+        const icon = new this.$L.Icon({
+          // Marker's property named icon can't be null
+          iconUrl: m.icon,
+          iconAnchor: [30, 75]
+        })
         this.$L
-          .marker((m as any).pos, { title: (m as any).name })
+          .marker(m.pos, { title: m.name })
+          .setIcon(icon)
+          // .on('click', (ev : L.LeafletMouseEvent) => {
+          //   this.focusLandMarker = m
+          //   this.cardX = ev.containerPoint.x + 10
+          //   this.cardY = ev.containerPoint.y - 120
+          //   this.cardPopoutPos = 'left: ' + this.cardX + 'px; top: ' + this.cardY + 'px'
+          //   this.cardImage = m.image
+          // })
+          .bindPopup(`<img src="${m.image}">`, { className: 'popup-marker-summary', closeButton: false })
           .addTo(mapObject)
       }
       mapObject.on('mousemove', (e: L.LeafletMouseEvent) => {
         this.posX = e.latlng.lat
         this.posY = e.latlng.lng
+        const coords = this.mapObject.latLngToContainerPoint(new this.$L.LatLng(this.focusLandMarker.pos[0], this.focusLandMarker.pos[1]))
+        coords.x += 10
+        coords.y -= 120
+        this.cardPopoutPos = 'left: ' + coords.x + 'px; top: ' + coords.y + 'px'
       })
       // Make map object can be used in methods
       this.mapObject = mapObject
@@ -179,13 +224,17 @@ export default Vue.extend({
     selectRegion ({ id, name, latlng } : { id: string, name: string, latlng: number[]}) {
       this.currentRegion = id
       this.currentRegionName = name
-
       this.mapObject.setView(latlng as [number, number], -1)
-
-      // temp zoom level to show enkanomiya
       if (id === 'enkanomiya') {
-        this.mapObject.setZoom(-2)
+        this.maxZoom = 2
+        this.minZoom = -2
+      } else {
+        this.maxZoom = 2
+        this.minZoom = -4
       }
+    },
+    landMarkCard (marker : Object) {
+      alert(marker.toString)
     }
   }
 })
@@ -220,6 +269,8 @@ export default Vue.extend({
   background-color: rgba(66, 101, 136, 0.5);
 }
 
+.landMarkCard-unfocus {
+}
 #qr_code {
   background: url("~@/assets/images/btn_qrcode.png") no-repeat;
 }

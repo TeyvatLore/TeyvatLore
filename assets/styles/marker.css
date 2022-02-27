@@ -1,0 +1,20 @@
+.popup-marker-summary {
+    margin-bottom: 0;
+    margin-left: 270px;
+}
+
+.popup-marker-summary .leaflet-popup-content-wrapper {
+    padding: 0;
+    background: none;
+    box-shadow: none;
+}
+  
+.popup-marker-summary .leaflet-popup-content-wrapper .leaflet-popup-content {
+    margin: 0;
+    width: max-content !important;
+    height: max-content !important;
+}
+
+.popup-marker-summary .leaflet-popup-tip-container {
+    display: none;
+}
