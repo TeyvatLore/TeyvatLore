@@ -67,7 +67,7 @@ const mapSize = [30720, 30720]
 export default Vue.extend({
   name: 'IndexPage',
   async asyncData ({ $content }) {
-    const markers = await $content('markers').fetch()
+    const markers = await $content('gen/markers').fetch()
     const markerData = await $content('marker/SunfireGate').fetch()
     return {
       markers: (markers as any).markers,
