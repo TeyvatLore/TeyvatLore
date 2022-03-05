@@ -60,6 +60,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { GenshinRegion, Nullable, Region } from '~/types'
 
 const mapCenter = [3568, 6286]
 const mapSize = [30720, 30720]
@@ -89,11 +90,28 @@ export default Vue.extend({
         { id: 'inazuma', name: '稻妻', latlng: [6500, 3600] },
         { id: 'dragonspine', name: '龙脊雪山', latlng: [1600, -2200] },
         { id: 'enkanomiya', name: '渊下宫', latlng: [-1000, -4700] }
-      ],
-      currentRegion: 'mondstadt',
-      currentRegionName: '蒙德',
+      ] as Region[],
+      currentRegion: 'mondstadt' as keyof GenshinRegion,
+      currentRegionName: '蒙德' as GenshinRegion[keyof GenshinRegion],
       subRegionName: '西风教堂',
-      markerData: { title: '', body: [] }
+      markerData: { title: '', body: [] },
+      enkanomiyaLayer: null as Nullable<L.TileLayer>
+    }
+  },
+  watch: {
+    currentRegion (newRegion: keyof GenshinRegion, oldRegion: keyof GenshinRegion) {
+      if (oldRegion === 'enkanomiya' && newRegion !== 'enkanomiya') {
+        // switch to teyvat
+        this.enkanomiyaLayer?.removeFrom(this.mapObject)
+        this.tileLayer.addTo(this.mapObject)
+      } else if (oldRegion !== 'enkanomiya' && newRegion === 'enkanomiya') {
+        // switch to enkanomiya
+        this.tileLayer.removeFrom(this.mapObject)
+        this.enkanomiyaLayer?.addTo(this.mapObject)
+        this.mapObject.setMinZoom(-5)
+        this.mapObject.setMaxZoom(-2)
+        this.mapObject.setZoom(-5)
+      }
     }
   },
   mounted () {
@@ -130,13 +148,13 @@ export default Vue.extend({
     const TileLayerClass = this.$L.TileLayer.extend({
       getTileUrl: (coords: L.Coords) => {
         const [x, y, z] = [coords.x, coords.y, coords.z + 15]
-        if (this.currentRegion === 'enkanomiya') {
-          return `https://cdn.jsdelivr.net/gh/TeyvatLore/MapTile@gh-pages/enkanomiya/${z}/${y}_${x}.png`
-          // return `https://raw.githubusercontent.com/TeyvatLore/MapTile/gh-pages/enkanomiya/${z}/${y}_${x}.png`
-        } else {
-          return `https://cdn.jsdelivr.net/gh/TeyvatLore/MapTile@gh-pages/teyvat/${z}/${x}_${y}.jpg`
-          // return `https://teyvatlore.github.io/MapTile/teyvat/${z}/${x}_${y}.jpg`
-        }
+        // if (this.currentRegion === 'enkanomiya') {
+        // return `https://cdn.jsdelivr.net/gh/TeyvatLore/MapTile@gh-pages/enkanomiya/${z}/${y}_${x}.png`
+        // return `https://raw.githubusercontent.com/TeyvatLore/MapTile/gh-pages/enkanomiya/${z}/${y}_${x}.png`
+        // } else {
+        return `https://cdn.jsdelivr.net/gh/TeyvatLore/MapTile@gh-pages/teyvat/${z}/${x}_${y}.jpg`
+        // return `https://teyvatlore.github.io/MapTile/teyvat/${z}/${x}_${y}.jpg`
+        // }
       },
       reuseTiles: true
     })
@@ -153,8 +171,24 @@ export default Vue.extend({
       )
     })
 
+    // initialize enkanomiyaLayer
+    this.enkanomiyaLayer = new this.$L.TileLayer('', {
+      maxNativeZoom: -2,
+      minNativeZoom: -5,
+      maxZoom: -2,
+      minZoom: -5,
+      bounds: this.$L.latLngBounds(
+        this.$L.latLng(-mapCenter[0], -mapCenter[1]),
+        this.$L.latLng(mapSize[0] - mapCenter[0], mapSize[1] - mapCenter[1])
+      )
+    })
+    this.enkanomiyaLayer!.getTileUrl = (coords) => {
+      const [x, y, z] = [coords.x, coords.y, coords.z + 15]
+      return `https://cdn.jsdelivr.net/gh/TeyvatLore/MapTile@gh-pages/enkanomiya/${z}/${y}_${x}.png`
+    }
+
     this.mapReady = true
-    this.$nextTick(function () {
+    this.$nextTick(() => {
       const mapObject = (this.$refs.mapi as any).mapObject
       mapObject.addLayer(this.tileLayer)
       for (const m of (this as any).markers) {
@@ -176,16 +210,11 @@ export default Vue.extend({
       return require(`~/assets/images/btn_switch_${id}${active}.png`)
     },
     // switch region on map
-    selectRegion ({ id, name, latlng } : { id: string, name: string, latlng: number[]}) {
+    selectRegion ({ id, name, latlng } : Region) {
       this.currentRegion = id
       this.currentRegionName = name
 
-      this.mapObject.setView(latlng as [number, number], -1)
-
-      // temp zoom level to show enkanomiya
-      if (id === 'enkanomiya') {
-        this.mapObject.setZoom(-2)
-      }
+      this.mapObject.setView(latlng, -1)
     }
   }
 })
