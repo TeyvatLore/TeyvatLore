@@ -195,24 +195,9 @@ export default Vue.extend({
         this.$L
           .marker(m.pos, { title: m.name })
           .setIcon(icon)
-          // .on('click', (ev : L.LeafletMouseEvent) => {
-          //   this.focusLandMarker = m
-          //   this.cardX = ev.containerPoint.x + 10
-          //   this.cardY = ev.containerPoint.y - 120
-          //   this.cardPopoutPos = 'left: ' + this.cardX + 'px; top: ' + this.cardY + 'px'
-          //   this.cardImage = m.image
-          // })
           .bindPopup(`<img src="${m.image}">`, { className: 'popup-marker-summary', closeButton: false })
           .addTo(mapObject)
       }
-      mapObject.on('mousemove', (e: L.LeafletMouseEvent) => {
-        this.posX = e.latlng.lat
-        this.posY = e.latlng.lng
-        const coords = this.mapObject.latLngToContainerPoint(new this.$L.LatLng(this.focusLandMarker.pos[0], this.focusLandMarker.pos[1]))
-        coords.x += 10
-        coords.y -= 120
-        this.cardPopoutPos = 'left: ' + coords.x + 'px; top: ' + coords.y + 'px'
-      })
       // Make map object can be used in methods
       this.mapObject = mapObject
     })
@@ -271,8 +256,6 @@ export default Vue.extend({
   background-color: rgba(66, 101, 136, 0.5);
 }
 
-.landMarkCard-unfocus {
-}
 #qr_code {
   background: url("~@/assets/images/btn_qrcode.png") no-repeat;
 }
